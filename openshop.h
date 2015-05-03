@@ -12,27 +12,32 @@ typedef struct{
     int debut;
 }Tache;
 
-typedef struct{
-    Tache** taches;
-}Machine;
+/*typedef struct{
+    Tache* taches;
+}Machine;*/
 
 typedef struct{
     Tache* taches;
 }Job;
 
-typedef struct{
+/*typedef struct{
     Machine* machines;
-}Solution;
+}Solution;*/
 
 Tache nouvelle_tache(int machine, int job, int duree);
-Machine* nouvelle_machine();
-Job* nouveaux_jobs(Tache *taches);
+//Machine* nouvelle_machine();
+Job* nouveau_job();
+Job** nouveaux_jobs(Tache *taches);
 void affiche();
+void affiche_machine();
 Tache* tri_croissant();
 Tache* tri_decroissant();
 void trouve_solution_croissante();
+void trouve_solution_decroissante();
+int max(int a, int b);
 
-Job *jobs;
+
+Job **jobs;
 int nb_jobs;
 int nb_taches;
 #endif

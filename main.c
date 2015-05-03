@@ -15,16 +15,19 @@ int main(){
     taches[7] = nouvelle_tache(2,4,1);
     taches[8] = nouvelle_tache(3,4,8);
 
-    Machine *m1 = nouvelle_machine();
+    /*Machine *m1 = nouvelle_machine();
     Machine *m2 = nouvelle_machine();
-    Machine *m3 = nouvelle_machine();
+    Machine *m3 = nouvelle_machine();*/
 
 
     jobs = nouveaux_jobs(taches);
 
-    trouve_solution_croissante();
-    affiche();
+    //trouve_solution_croissante();
+    
 
+trouve_solution_decroissante();
+affiche();
+affiche_machine();
     //Evaluation de la population
 
     //Création de la nouvelle population
