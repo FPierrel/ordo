@@ -1,4 +1,4 @@
-﻿#include "openshop.h"
+#include "openshop.h"
 
 Tache nouvelle_tache(int machine, int job, int duree){
     Tache tache;
@@ -9,12 +9,6 @@ Tache nouvelle_tache(int machine, int job, int duree){
 
     return tache;
 }
-
-/*Machine* nouvelle_machine(){
-    Machine *m = malloc(sizeof(Machine));
-    m->taches = malloc(nb_jobs*sizeof(Tache));
-    return m;
-}*/
 
 Job* nouveau_job(){
 	Job *j = malloc(sizeof(Job));
@@ -56,6 +50,26 @@ void affiche_machine(){
 		for (j=0;j<nb_jobs;j++)
 			if (jobs[j]->taches[i].job!=-1)
 				printf("Job: %d, debut: %d, duree: %d\n",jobs[j]->taches[i].job,jobs[j]->taches[i].debut,jobs[j]->taches[i].duree);
+	}
+}
+
+void affichage_machine_ASCII(){
+	int i,j,current,k;
+	for (i=0;i<3;i++){
+		printf("Machine n°%d\t",i+1);
+		for (j=0;j<date_fin();j++){
+			current=0;
+			for (k=0;k<nb_jobs;k++)
+				if (jobs[k]->taches[i].debut!=-1 && jobs[k]->taches[i].debut<=j && jobs[k]->taches[i].debut+jobs[k]->taches[i].duree>j){
+					current=jobs[k]->taches[i].job;
+					break;
+				}
+			if (current==0)
+				printf("-");
+			else
+				printf("%d",current);
+		}
+		printf("\n");		
 	}
 }
 
@@ -128,74 +142,107 @@ void raz_debut_jobs(){
 void trouve_solution_croissante(){
     	Tache *t = tri_croissant();
 	raz_debut_jobs();
-    	int i,j,k,debut,num_machine,num_job;
+    	int i;
 
-    	for (i=0; i < nb_taches; i++){
-		num_machine = t[i].machine-1;
-		num_job = t[i].job-1;
-		debut = 0;
-        	for (j = 0 ; j < nb_jobs ; j++)
-			for (k = 0 ; k < 3 ; k++)
-		        	if (jobs[j]->taches[k].debut != -1 && (k == num_machine || j==num_job))
-		            		debut = max(debut,jobs[j]->taches[k].debut+jobs[j]->taches[k].duree);
-
-		jobs[num_job]->taches[num_machine].debut = debut;
-    	}
+    	for (i=0; i < nb_taches; i++)
+		put_tache(t[i]);
 }
 
 void trouve_solution_decroissante(){
     	Tache *t = tri_decroissant();
-    	int i,j,k,debut,num_machine,num_job;
+    	int i;
 	raz_debut_jobs();
-    	for (i=0; i < nb_taches; i++){
-		num_machine = t[i].machine-1;
-		num_job = t[i].job-1;
-		debut = 0;
-        	for (j = 0 ; j < nb_jobs ; j++)
-			for (k = 0 ; k < 3 ; k++)
-		        	if (jobs[j]->taches[k].debut != -1 && (k == num_machine || j==num_job)){
-		            		debut = max(debut,jobs[j]->taches[k].debut+jobs[j]->taches[k].duree);
-				}
+    	for (i=0; i < nb_taches; i++)
+		put_tache(t[i]);
+    	
+}
 
-		jobs[num_job]->taches[num_machine].debut = debut;
-    	}
+void put_tache(Tache t){
+	int i;
+	int j=0;
+	int bornes [nb_jobs+1][2];
+	int start = 0;
+	int fin = start+t.duree;
+	int boolean=1;
+
+	//Récupère les bornes pour le même job
+	for (i=0;i<3;i++)
+		if (i!=t.machine-1){
+			if (jobs[t.job-1]->taches[i].debut!=-1){
+				bornes[j][0]=jobs[t.job-1]->taches[i].debut;
+				bornes[j][1]=jobs[t.job-1]->taches[i].debut+jobs[t.job-1]->taches[i].duree;
+			}
+			else{
+				bornes[j][0]=-1;
+				bornes[j][1]=-1;
+			}
+			j++;
+		}
+	//Récupère les bornes pour la même machines
+	for (i=0;i<nb_jobs;i++)	
+		if (i!=t.job-1){
+			if (jobs[i]->taches[t.machine-1].debut!=-1){
+				bornes[j][0]=jobs[i]->taches[t.machine-1].debut;
+				bornes[j][1]=jobs[i]->taches[t.machine-1].debut+jobs[i]->taches[t.machine-1].duree;
+			}
+			else{
+				bornes[j][0]=-1;
+				bornes[j][1]=-1;
+			}
+			j++;
+		}
+	//Test si possible de mettre à 0
+	for (i=0;i<nb_jobs+1;i++)
+		if (bornes[i][0]!=-1 && bornes[i][0]<fin){
+			boolean=0;
+			break;
+		}
+
+	//Si pas possible cherche le minimum où mettre
+	if (boolean==0){
+		start=INT_MAX;
+		for (i=0;i<nb_jobs+1;i++)
+			if (bornes[i][0]!=-1){
+				boolean=1;
+				for (j=0;j<nb_jobs+1;j++)
+					if (bornes[j][0]!=-1 && bornes[j][0]<(bornes[i][1]+t.duree) && bornes[j][1]>bornes[i][1]){
+						boolean=0;
+						break;
+					}
+				if (boolean==1){
+					start=min(start,bornes[i][1]);
+					fin=start+t.duree;
+				}
+			}
+	}
+	
+	jobs[t.job-1]->taches[t.machine-1].debut=start;
+
+}
+
+int date_fin(){
+	int i,j,maxc=0;
+	for (i=0;i<nb_jobs;i++)
+		for (j=0;j<3;j++)
+			maxc = max(maxc,jobs[i]->taches[j].debut+jobs[i]->taches[j].duree);
+
+	return maxc;
 }
 
 int max(int a, int b){
     return a > b ? a : b;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Machine trouve_solution_machine(Machine m, Jobs j, Solution *s){
-/*	srand(time(NULL));
-    int i;
-    int r=rand()%m.nb_taches;
-    for (i=0;i<m.nb_taches;i++){
-        m.taches[r].debut
-    }
-    */
-
-
-
- /* Solution *solutions[100];
-
-    for (i=0;i<100;i++)
-        solutions[i]=nouvelle_solution(*m1,*m2,*m3);
-
-    for (i=0;i<10;i++){
-        r = (rand() % 3) + 1;
-        for (j=0;j<3;j++){
-            solutions[i]->machines[r] = trouve_solution_machine(s->machines[r], *job, solutions[i]);
-            r = (r+1)%3;
-        }
-    }*/
-
+int min(int a, int b){
+    return a > b ? b : a;
 }
 
-Solution croisement (Solution s1, Solution s2)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/*Solution croisement (Solution s1, Solution s2)
 {
    int fils,cut,m;
    Solution sol; // instance du résultat du croisement
@@ -252,4 +299,4 @@ Solution mutation (Solution s)
 
     //effectuer la mutation
     return sol;
-}
+}*/

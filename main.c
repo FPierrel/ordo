@@ -1,4 +1,4 @@
-﻿#include "openshop.h"
+#include "openshop.h"
 
 int main(){
     Tache taches[9];
@@ -15,34 +15,14 @@ int main(){
     taches[7] = nouvelle_tache(2,4,1);
     taches[8] = nouvelle_tache(3,4,8);
 
-    /*Machine *m1 = nouvelle_machine();
-    Machine *m2 = nouvelle_machine();
-    Machine *m3 = nouvelle_machine();*/
-
-
     jobs = nouveaux_jobs(taches);
 
     //trouve_solution_croissante();
     
 
-    trouve_solution_decroissante();
-    affiche();
-    affiche_machine();
-    //Evaluation de la population
-
-    //Création de la nouvelle population
-
-    /* free(m1->taches);
-    free(m1->debuts);
-    free(m1);
-    free(m2->taches);
-    free(m2->debuts);
-    free(m2);
-    free(m3->taches);
-    free(m3->debuts);
-    free(m3);
-    free(s->machines);
-    free(s);*/
+trouve_solution_croissante();
+affichage_machine_ASCII();
+affiche_machine();
 
     return 0;
 
