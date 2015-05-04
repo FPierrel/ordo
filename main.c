@@ -1,4 +1,4 @@
-#include "openshop.h"
+﻿#include "openshop.h"
 
 int main(){
     Tache taches[9];
@@ -25,14 +25,14 @@ int main(){
     //trouve_solution_croissante();
     
 
-trouve_solution_decroissante();
-affiche();
-affiche_machine();
+    trouve_solution_decroissante();
+    affiche();
+    affiche_machine();
     //Evaluation de la population
 
     //Création de la nouvelle population
 
-   /* free(m1->taches);
+    /* free(m1->taches);
     free(m1->debuts);
     free(m1);
     free(m2->taches);

@@ -1,4 +1,4 @@
-#include "openshop.h"
+﻿#include "openshop.h"
 
 Tache nouvelle_tache(int machine, int job, int duree){
     Tache tache;
@@ -163,4 +163,93 @@ void trouve_solution_decroissante(){
 
 int max(int a, int b){
     return a > b ? a : b;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Machine trouve_solution_machine(Machine m, Jobs j, Solution *s){
+/*	srand(time(NULL));
+    int i;
+    int r=rand()%m.nb_taches;
+    for (i=0;i<m.nb_taches;i++){
+        m.taches[r].debut
+    }
+    */
+
+
+
+ /* Solution *solutions[100];
+
+    for (i=0;i<100;i++)
+        solutions[i]=nouvelle_solution(*m1,*m2,*m3);
+
+    for (i=0;i<10;i++){
+        r = (rand() % 3) + 1;
+        for (j=0;j<3;j++){
+            solutions[i]->machines[r] = trouve_solution_machine(s->machines[r], *job, solutions[i]);
+            r = (r+1)%3;
+        }
+    }*/
+
+}
+
+Solution croisement (Solution s1, Solution s2)
+{
+   int fils,cut,m;
+   Solution sol; // instance du résultat du croisement
+
+   fils = rand() % 2;    // Coisir sur quel parent couper (s1 ou s2)
+   m = rand() %  3 ;  //choisir sur quelle machine faire le croisement (m1, m2 ou m3)
+   if ( fils == 0 )  //parent 1
+   {
+     if (m==0) // machine m1 du parent 1
+     {
+        //récupérer le fi
+        ptCoupe = rand() % fi // avec fi la date de fin de toutes les tâches sur la machine choisie  (ptCoupe dépend donc de m )
+        sol.m1 = //les tâches se retrouvant avant ptCoupe
+        // Ajouter les tâches manquantes dans l'ordre de leur apparition sur la machine 1 dans le parent 2
+
+     }
+     else if (m==1) // machine m2 du parent 1
+     {
+        //récupérer le fi
+        ptCoupe = rand() % fi // avec fi la date de fin de toutes les tâches sur la machine choisie  (ptCoupe dépend donc de m )
+        //...pareil que m1
+     }
+     else if (m==2) // machine m3 du parent 1
+     {
+        //récupérer le fi
+        ptCoupe = rand() % fi // avec fi la date de fin de toutes les tâches sur la machine choisie  (ptCoupe dépend donc de m )
+        //...pareil que m1
+
+     }
+   }
+
+   else {		//parent 2
+     // même chose que pour le parent 1 (copier coller)
+  }
+
+  //Maintenant on vérifie si il n'y a pas de collisions sur les autres machines après avoir fait le croisement sur une machine précédemment
+   if (fils==0)
+   {
+   }
+   else
+   {
+   }
+
+   return sol;
+
+
+}
+
+Solution mutation (Solution s)
+{
+    Solution sol;
+    m = rand() %  3 ;  //choisir sur quelle machine faire la mutation (m1, m2 ou m3)
+    suivOuPrec = rand() % 2 ; // 0 on mute la tâche courante avec la tâche suivante  ;  1 avec la précédente
+
+    //effectuer la mutation
+    return sol;
 }
