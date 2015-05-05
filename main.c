@@ -28,6 +28,9 @@ printf("\n");
 heuristique_bizarre(0);
 affichage_machine_ASCII(0);
 printf("\n");
+aleatoire(0);
+affichage_machine_ASCII(0);
+printf("\n");
 //affiche_machine(0);
 
     return 0;

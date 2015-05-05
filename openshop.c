@@ -241,6 +241,29 @@ void heuristique_bizarre(int indice){
 }
 
 
+void aleatoire(int indice){
+	Tache *t = tri_croissant(indice);
+	int i;
+	int alea;
+	int test[nb_taches];
+	raz_debut_jobs(indice);
+	srand(time(NULL));		
+	for (i=0;i<nb_taches;i++)
+		test[i]=0;
+	i=0;
+
+	while (i!=nb_taches){
+		alea = rand() % nb_taches;
+		if (test[alea]==0){
+			test[alea]++;
+			put_tache(t[alea],indice);
+			i++;
+		}
+	}
+	
+
+}
+
 int tache_max(int job, int place, int indice){
 	int classement[3];
 	
@@ -332,12 +355,15 @@ int min(int a, int b){
 }
 
 
-void croisement (int indice){
+/*void croisement (int indice){
 	srand(time(NULL));
-	//int parent1 = rand() % nb_pop;
-	//int parent2 = rand() % nb_pop;
+	int parent1 = rand() % nb_pop;
+	int parent2 = rand() % nb_pop;
 
-}
+	int machine_comp[2][2];
+	
+	machine_comp=machines_compatibles
+}*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
