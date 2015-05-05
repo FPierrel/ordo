@@ -18,14 +18,17 @@ int main(){
 
 
 	jobs = nouvelle_pop(taches);
-    //trouve_solution_croissante();
-
-
-//trouve_solution_croissante(0);
-
+	next_gen = nouvelle_pop(taches);
+trouve_solution_croissante(0);
+affichage_machine_ASCII(0);
+printf("\n");
+trouve_solution_decroissante(0);
+affichage_machine_ASCII(0);
+printf("\n");
 heuristique_bizarre(0);
 affichage_machine_ASCII(0);
-affiche_machine(0);
+printf("\n");
+//affiche_machine(0);
 
     return 0;
 

@@ -36,8 +36,11 @@ Tache * tri_bizarre(int indice);
 int date_fin(int indice);
 int max(int a, int b);
 int min(int a, int b);
+void croisement (int indice);
+
 
 Job ***jobs;
+Job ***next_gen;
 int nb_jobs;
 int nb_taches;
 int nb_pop;
