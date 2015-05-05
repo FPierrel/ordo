@@ -1,11 +1,10 @@
 #include "openshop.h"
 
-int main(){
-    Tache taches[9];
+int main(){    
     nb_jobs = 4;
     nb_taches = 9;
 	nb_pop=100;
-
+Tache taches[9];
     taches[0] = nouvelle_tache(1,1,6);
     taches[1] = nouvelle_tache(3,1,2);
     taches[2] = nouvelle_tache(2,2,1);
@@ -31,7 +30,9 @@ printf("\n");
 aleatoire(0);
 affichage_machine_ASCII(0);
 printf("\n");
-//affiche_machine(0);
+
+printf("Croisement\n");
+croisement(taches,jobs[0],jobs[1]);
 
     return 0;
 

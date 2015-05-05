@@ -24,6 +24,7 @@ Job*** nouvelle_pop(Tache *taches);
 void affiche(int indice);
 void affiche_machine(int indice);
 void affichage_machine_ASCII(int indice);
+void affichage_solution_ASCII(Job** jobs);
 Tache* tri_croissant();
 Tache* tri_decroissant();
 void raz_debut_jobs(int indice);
@@ -37,8 +38,8 @@ Tache * tri_bizarre(int indice);
 int date_fin(int indice);
 int max(int a, int b);
 int min(int a, int b);
+Job** croisement(Tache *taches,Job** j1, Job** j2);
 //void croisement (int indice);
-
 
 Job ***jobs;
 Job ***next_gen;

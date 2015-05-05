@@ -83,6 +83,26 @@ void affichage_machine_ASCII(int indice){
 	}
 }
 
+void affichage_solution_ASCII(Job** jobs){
+	int i,j,current,k;
+	for (i=0;i<3;i++){
+		printf("Machine n°%d\t",i+1);
+		for (j=0;j<50;j++){
+			current=0;
+			for (k=0;k<nb_jobs;k++)
+				if (jobs[k]->taches[i].debut!=-1 && jobs[k]->taches[i].debut<=j && jobs[k]->taches[i].debut+jobs[k]->taches[i].duree>j){
+					current=jobs[k]->taches[i].job;
+					break;
+				}
+			if (current==0)
+				printf("-");
+			else
+				printf("%d",current);
+		}
+		printf("\n");		
+	}
+}
+
 Tache* tri_croissant(int indice){
 
     int i = nb_taches,j,k,pos;
@@ -354,76 +374,62 @@ int min(int a, int b){
     return a > b ? b : a;
 }
 
-
-/*void croisement (int indice){
+Job** croisement(Tache *taches, Job** j1, Job** j2){ //Ne test pas la validité de la solution !!
 	srand(time(NULL));
-	int parent1 = rand() % nb_pop;
-	int parent2 = rand() % nb_pop;
-
-	int machine_comp[2][2];
+	int fils = rand()%2; //parent sur lequel on coupe
+	int m = rand()%3; //machine sur lequel on fait le croisement
+	int ptCoupe = 0;
+	int i,j;
+	Job **res = nouveaux_jobs(taches);
+	Job **s1;
+	Job **s2;
 	
-	machine_comp=machines_compatibles
-}*/
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/*Solution croisement (Solution s1, Solution s2)
-{
-   int fils,cut,m;
-   Solution sol; // instance du résultat du croisement
-
-   fils = rand() % 2;    // Coisir sur quel parent couper (s1 ou s2)
-   m = rand() %  3 ;  //choisir sur quelle machine faire le croisement (m1, m2 ou m3)
-   if ( fils == 0 )  //parent 1
-   {
-     if (m==0) // machine m1 du parent 1
-     {
-        //récupérer le fi
-        ptCoupe = rand() % fi // avec fi la date de fin de toutes les tâches sur la machine choisie  (ptCoupe dépend donc de m )
-        sol.m1 = //les tâches se retrouvant avant ptCoupe
-        // Ajouter les tâches manquantes dans l'ordre de leur apparition sur la machine 1 dans le parent 2
-
-     }
-     else if (m==1) // machine m2 du parent 1
-     {
-        //récupérer le fi
-        ptCoupe = rand() % fi // avec fi la date de fin de toutes les tâches sur la machine choisie  (ptCoupe dépend donc de m )
-        //...pareil que m1
-     }
-     else if (m==2) // machine m3 du parent 1
-     {
-        //récupérer le fi
-        ptCoupe = rand() % fi // avec fi la date de fin de toutes les tâches sur la machine choisie  (ptCoupe dépend donc de m )
-        //...pareil que m1
-
-     }
-   }
-
-   else {		//parent 2
-     // même chose que pour le parent 1 (copier coller)
-  }
-
-  //Maintenant on vérifie si il n'y a pas de collisions sur les autres machines après avoir fait le croisement sur une machine précédemment
-   if (fils==0)
-   {
-   }
-   else
-   {
-   }
-
-   return sol;
-
-
+	if (fils == 0){
+		s1 = j1;
+		s2 = j2;
+	}
+	else{
+		s1 = j2;
+		s2 = j1;
+	}
+	
+	for (i = 0 ; i < nb_jobs ; i++)
+		if (s1[i]->taches[m].debut + s1[i]->taches[m].duree > ptCoupe)
+			ptCoupe = s1[i]->taches[m].debut + s1[i]->taches[m].duree;
+		
+	//On recopie et complete
+	for(i = 0 ; i < nb_jobs ; i++){
+		for (j = 0 ; j < 3 ; j++){
+			if (j != m){				
+				res[i]->taches[j].debut = s1[i]->taches[j].debut;
+			}
+			else
+			{				
+				if (s1[i]->taches[m].debut + s1[i]->taches[m].duree <= ptCoupe)
+					res[i]->taches[j].debut = s1[i]->taches[j].debut;
+				else
+					res[i]->taches[j].debut = s2[i]->taches[j].debut;	
+			}
+		}
+	}
+	
+	printf("Test croisement\n");
+	printf("fils %d, machine %d, ptCoupe %d\n",fils,m,ptCoupe);
+	affichage_solution_ASCII(j1);
+	affichage_solution_ASCII(j2);
+	affichage_solution_ASCII(res);
+	return res;
 }
 
-Solution mutation (Solution s)
-{
-    Solution sol;
-    m = rand() %  3 ;  //choisir sur quelle machine faire la mutation (m1, m2 ou m3)
-    suivOuPrec = rand() % 2 ; // 0 on mute la tâche courante avec la tâche suivante  ;  1 avec la précédente
-
-    //effectuer la mutation
-    return sol;
-}*/
+Job** mutation(Tache* taches, Job** jobs){
+	Job **res = nouveaux_jobs(taches);
+	
+	m = rand() %  3 ;  //choisir sur quelle machine faire la mutation (m1, m2 ou m3)
+    sens = rand() % 2 ; // 0 on echange avec celle d'avant, 1 après (sauf si c'est la premiere ou la derniere sinn on mutera quasi jamais)
+	
+	
+	
+	printf("Test mutation\n");
+	printf("machine %d, sens %d\n",m,sens);
+	return res;
+}
