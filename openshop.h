@@ -31,6 +31,8 @@ void trouve_solution_croissante(int indice);
 void trouve_solution_decroissante(int indice);
 void put_tache(Tache t,int indice);
 void heuristique_bizarre(int indice);
+int tache_max(int job, int place, int indice);
+Tache * tri_bizarre(int indice);
 int date_fin(int indice);
 int max(int a, int b);
 int min(int a, int b);

@@ -231,9 +231,87 @@ void put_tache(Tache t, int indice){
 }
 
 void heuristique_bizarre(int indice){
-	/*Tache *t = tri_decroissant();
+	Tache *t = tri_bizarre(indice);
     	int i;
-	raz_debut_jobs();*/
+	raz_debut_jobs(indice);
+	
+	for (i=0;i<nb_taches;i++)
+		put_tache(t[i],indice);
+		
+}
+
+
+int tache_max(int job, int place, int indice){
+	int classement[3];
+	
+	if (jobs[indice][job]->taches[0].duree>jobs[indice][job]->taches[1].duree)
+		if (jobs[indice][job]->taches[0].duree>jobs[indice][job]->taches[2].duree){
+			classement[0]=0;
+			if (jobs[indice][job]->taches[1].duree>jobs[indice][job]->taches[2].duree){
+				classement[1]=1;
+				classement[2]=2;
+			}
+			else{
+				classement[1]=2;
+				classement[2]=1;
+			}
+		}
+		else {
+			classement[0]=2;
+			classement[1]=0;
+			classement[2]=1;
+		}
+	else if (jobs[indice][job]->taches[0].duree>jobs[indice][job]->taches[2].duree){
+		classement[0]=1;
+		classement[1]=0;
+		classement[2]=2;
+	}
+	else if (jobs[indice][job]->taches[1].duree>jobs[indice][job]->taches[2].duree){
+		classement[0]=1;
+		classement[1]=2;
+		classement[2]=0;
+	}
+	else {
+		classement[0]=2;
+		classement[1]=1;
+		classement[2]=0;
+	}
+
+	return classement[place];
+
+}
+
+Tache * tri_bizarre(int indice){
+	Tache *taches = malloc(nb_taches*sizeof(Tache*));
+	int duree_jobs[nb_jobs];
+	int i,j;
+	int current_job,current_machine;	
+	int cpt_jobs[nb_jobs];
+
+	for (i=0;i<nb_jobs;i++){
+		duree_jobs[i]=0;
+		for (j=0;j<3;j++)
+			if (jobs[indice][i]->taches[j].duree!=-1)
+				duree_jobs[i]+=jobs[indice][i]->taches[j].duree;
+	}
+
+	for (i=0;i<nb_jobs;i++)
+		cpt_jobs[i]=0;
+
+	for (i=0;i<nb_taches;i++){
+		current_job=0;
+		for (j=1;j<nb_jobs;j++)
+			if (duree_jobs[current_job]<duree_jobs[j])
+				current_job=j;	
+		current_machine=tache_max(current_job,cpt_jobs[current_job],indice);
+		cpt_jobs[current_job]++;
+		duree_jobs[current_job]-=jobs[indice][current_job]->taches[current_machine].duree;
+		taches[i]=jobs[indice][current_job]->taches[current_machine];
+	}
+
+	return taches;
+		
+
 }
 
 int date_fin(int indice){

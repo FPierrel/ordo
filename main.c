@@ -19,9 +19,11 @@ int main(){
 
 	jobs = nouvelle_pop(taches);
     //trouve_solution_croissante();
-    
 
-trouve_solution_croissante(0);
+
+//trouve_solution_croissante(0);
+
+heuristique_bizarre(0);
 affichage_machine_ASCII(0);
 affiche_machine(0);
 
