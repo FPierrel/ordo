@@ -20,6 +20,7 @@ typedef struct{
 Tache nouvelle_tache(int machine, int job, int duree);
 Job* nouveau_job();
 Job** nouveaux_jobs(Tache *taches);
+Job*** nouvelle_pop(Tache *taches);
 void affiche();
 void affiche_machine();
 void affichage_machine_ASCII();
@@ -33,7 +34,8 @@ int date_fin();
 int max(int a, int b);
 int min(int a, int b);
 
-Job **jobs;
+Job ***jobs;
 int nb_jobs;
 int nb_taches;
+int nb_pop;
 #endif

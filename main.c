@@ -4,6 +4,7 @@ int main(){
     Tache taches[9];
     nb_jobs = 4;
     nb_taches = 9;
+	nb_pop=100;
 
     taches[0] = nouvelle_tache(1,1,6);
     taches[1] = nouvelle_tache(3,1,2);
@@ -15,8 +16,8 @@ int main(){
     taches[7] = nouvelle_tache(2,4,1);
     taches[8] = nouvelle_tache(3,4,8);
 
-    jobs = nouveaux_jobs(taches);
 
+	jobs = nouvelle_pop(taches);
     //trouve_solution_croissante();
     
 

@@ -33,13 +33,23 @@ Job** nouveaux_jobs(Tache *taches){
 	return j;
 }
 
+Job*** nouvelle_pop(Tache *taches){
+	int i;
+	
+	Job ***j = malloc(nb_pop*nb_jobs*sizeof(Job));
+
+	for (i=0;i<nb_pop;i++)
+		j[i]=nouveaux_jobs(taches);
+	return j;
+}
+
 void affiche(){
     	int i,j;
     	for (i=0;i<nb_jobs;i++) {
         	printf("Job n°%d\n",i+1);
         	for (j=0;j<3;j++)
-			if (jobs[i]->taches[j].job!=-1)
-		        	printf("Machine: %d, debut: %d, duree: %d\n",jobs[i]->taches[j].machine,jobs[i]->taches[j].debut,jobs[i]->taches[j].duree);
+			if (jobs[0][i]->taches[j].job!=-1)
+		        	printf("Machine: %d, debut: %d, duree: %d\n",jobs[0][i]->taches[j].machine,jobs[0][i]->taches[j].debut,jobs[0][i]->taches[j].duree);
     	}
 }
 
@@ -48,8 +58,8 @@ void affiche_machine(){
 	for (i=0;i<3;i++){
 		printf("Machine n°%d\n",i+1);
 		for (j=0;j<nb_jobs;j++)
-			if (jobs[j]->taches[i].job!=-1)
-				printf("Job: %d, debut: %d, duree: %d\n",jobs[j]->taches[i].job,jobs[j]->taches[i].debut,jobs[j]->taches[i].duree);
+			if (jobs[0][j]->taches[i].job!=-1)
+				printf("Job: %d, debut: %d, duree: %d\n",jobs[0][j]->taches[i].job,jobs[0][j]->taches[i].debut,jobs[0][j]->taches[i].duree);
 	}
 }
 
@@ -60,8 +70,8 @@ void affichage_machine_ASCII(){
 		for (j=0;j<date_fin();j++){
 			current=0;
 			for (k=0;k<nb_jobs;k++)
-				if (jobs[k]->taches[i].debut!=-1 && jobs[k]->taches[i].debut<=j && jobs[k]->taches[i].debut+jobs[k]->taches[i].duree>j){
-					current=jobs[k]->taches[i].job;
+				if (jobs[0][k]->taches[i].debut!=-1 && jobs[0][k]->taches[i].debut<=j && jobs[0][k]->taches[i].debut+jobs[0][k]->taches[i].duree>j){
+					current=jobs[0][k]->taches[i].job;
 					break;
 				}
 			if (current==0)
@@ -80,8 +90,8 @@ Tache* tri_croissant(){
     pos = 0;
     for (k = 0 ; k < nb_jobs ; k++)
         for (j = 0 ; j < 3 ; j++)
-            if (jobs[k]->taches[j].job != -1){
-                taches[pos] = jobs[k]->taches[j];
+            if (jobs[0][k]->taches[j].job != -1){
+                taches[pos] = jobs[0][k]->taches[j];
                 pos++;
             }
 
@@ -109,8 +119,8 @@ Tache* tri_decroissant(){
     pos = 0;
     for (k = 0 ; k < nb_jobs ; k++)
         for (j = 0 ; j < 3 ; j++)
-            if (jobs[k]->taches[j].job != -1){
-                taches[pos] = jobs[k]->taches[j];
+            if (jobs[0][k]->taches[j].job != -1){
+                taches[pos] = jobs[0][k]->taches[j];
                 pos++;
             }
 
@@ -136,7 +146,7 @@ void raz_debut_jobs(){
 	int i,j;
     	for (i=0;i<nb_jobs;i++)
         	for (j=0;j<3;j++)
-			jobs[i]->taches[j].debut=-1;
+			jobs[0][i]->taches[j].debut=-1;
 }
 
 void trouve_solution_croissante(){
@@ -168,9 +178,9 @@ void put_tache(Tache t){
 	//Récupère les bornes pour le même job
 	for (i=0;i<3;i++)
 		if (i!=t.machine-1){
-			if (jobs[t.job-1]->taches[i].debut!=-1){
-				bornes[j][0]=jobs[t.job-1]->taches[i].debut;
-				bornes[j][1]=jobs[t.job-1]->taches[i].debut+jobs[t.job-1]->taches[i].duree;
+			if (jobs[0][t.job-1]->taches[i].debut!=-1){
+				bornes[j][0]=jobs[0][t.job-1]->taches[i].debut;
+				bornes[j][1]=jobs[0][t.job-1]->taches[i].debut+jobs[0][t.job-1]->taches[i].duree;
 			}
 			else{
 				bornes[j][0]=-1;
@@ -181,9 +191,9 @@ void put_tache(Tache t){
 	//Récupère les bornes pour la même machines
 	for (i=0;i<nb_jobs;i++)	
 		if (i!=t.job-1){
-			if (jobs[i]->taches[t.machine-1].debut!=-1){
-				bornes[j][0]=jobs[i]->taches[t.machine-1].debut;
-				bornes[j][1]=jobs[i]->taches[t.machine-1].debut+jobs[i]->taches[t.machine-1].duree;
+			if (jobs[0][i]->taches[t.machine-1].debut!=-1){
+				bornes[j][0]=jobs[0][i]->taches[t.machine-1].debut;
+				bornes[j][1]=jobs[0][i]->taches[t.machine-1].debut+jobs[0][i]->taches[t.machine-1].duree;
 			}
 			else{
 				bornes[j][0]=-1;
@@ -216,7 +226,7 @@ void put_tache(Tache t){
 			}
 	}
 	
-	jobs[t.job-1]->taches[t.machine-1].debut=start;
+	jobs[0][t.job-1]->taches[t.machine-1].debut=start;
 
 }
 
@@ -224,7 +234,7 @@ int date_fin(){
 	int i,j,maxc=0;
 	for (i=0;i<nb_jobs;i++)
 		for (j=0;j<3;j++)
-			maxc = max(maxc,jobs[i]->taches[j].debut+jobs[i]->taches[j].duree);
+			maxc = max(maxc,jobs[0][i]->taches[j].debut+jobs[0][i]->taches[j].duree);
 
 	return maxc;
 }
