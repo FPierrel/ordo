@@ -43,35 +43,35 @@ Job*** nouvelle_pop(Tache *taches){
 	return j;
 }
 
-void affiche(){
+void affiche(int indice){
     	int i,j;
     	for (i=0;i<nb_jobs;i++) {
         	printf("Job n°%d\n",i+1);
         	for (j=0;j<3;j++)
-			if (jobs[0][i]->taches[j].job!=-1)
-		        	printf("Machine: %d, debut: %d, duree: %d\n",jobs[0][i]->taches[j].machine,jobs[0][i]->taches[j].debut,jobs[0][i]->taches[j].duree);
+			if (jobs[indice][i]->taches[j].job!=-1)
+		        	printf("Machine: %d, debut: %d, duree: %d\n",jobs[indice][i]->taches[j].machine,jobs[indice][i]->taches[j].debut,jobs[indice][i]->taches[j].duree);
     	}
 }
 
-void affiche_machine(){
+void affiche_machine(int indice){
 	int i,j;
 	for (i=0;i<3;i++){
 		printf("Machine n°%d\n",i+1);
 		for (j=0;j<nb_jobs;j++)
-			if (jobs[0][j]->taches[i].job!=-1)
-				printf("Job: %d, debut: %d, duree: %d\n",jobs[0][j]->taches[i].job,jobs[0][j]->taches[i].debut,jobs[0][j]->taches[i].duree);
+			if (jobs[indice][j]->taches[i].job!=-1)
+				printf("Job: %d, debut: %d, duree: %d\n",jobs[indice][j]->taches[i].job,jobs[indice][j]->taches[i].debut,jobs[indice][j]->taches[i].duree);
 	}
 }
 
-void affichage_machine_ASCII(){
+void affichage_machine_ASCII(int indice){
 	int i,j,current,k;
 	for (i=0;i<3;i++){
 		printf("Machine n°%d\t",i+1);
-		for (j=0;j<date_fin();j++){
+		for (j=0;j<date_fin(indice);j++){
 			current=0;
 			for (k=0;k<nb_jobs;k++)
-				if (jobs[0][k]->taches[i].debut!=-1 && jobs[0][k]->taches[i].debut<=j && jobs[0][k]->taches[i].debut+jobs[0][k]->taches[i].duree>j){
-					current=jobs[0][k]->taches[i].job;
+				if (jobs[indice][k]->taches[i].debut!=-1 && jobs[indice][k]->taches[i].debut<=j && jobs[indice][k]->taches[i].debut+jobs[indice][k]->taches[i].duree>j){
+					current=jobs[indice][k]->taches[i].job;
 					break;
 				}
 			if (current==0)
@@ -83,15 +83,15 @@ void affichage_machine_ASCII(){
 	}
 }
 
-Tache* tri_croissant(){
+Tache* tri_croissant(int indice){
 
     int i = nb_taches,j,k,pos;
     Tache *taches = malloc(nb_taches*sizeof(Tache*));
     pos = 0;
     for (k = 0 ; k < nb_jobs ; k++)
         for (j = 0 ; j < 3 ; j++)
-            if (jobs[0][k]->taches[j].job != -1){
-                taches[pos] = jobs[0][k]->taches[j];
+            if (jobs[indice][k]->taches[j].job != -1){
+                taches[pos] = jobs[indice][k]->taches[j];
                 pos++;
             }
 
@@ -113,14 +113,14 @@ Tache* tri_croissant(){
     return taches;
 }
 
-Tache* tri_decroissant(){
+Tache* tri_decroissant(int indice){
     int i = nb_taches,j,k,pos;
     Tache *taches = malloc(nb_taches*sizeof(Tache*));
     pos = 0;
     for (k = 0 ; k < nb_jobs ; k++)
         for (j = 0 ; j < 3 ; j++)
-            if (jobs[0][k]->taches[j].job != -1){
-                taches[pos] = jobs[0][k]->taches[j];
+            if (jobs[indice][k]->taches[j].job != -1){
+                taches[pos] = jobs[indice][k]->taches[j];
                 pos++;
             }
 
@@ -142,32 +142,32 @@ Tache* tri_decroissant(){
     return taches;
 }
 
-void raz_debut_jobs(){
+void raz_debut_jobs(int indice){
 	int i,j;
     	for (i=0;i<nb_jobs;i++)
         	for (j=0;j<3;j++)
-			jobs[0][i]->taches[j].debut=-1;
+			jobs[indice][i]->taches[j].debut=-1;
 }
 
-void trouve_solution_croissante(){
-    	Tache *t = tri_croissant();
-	raz_debut_jobs();
+void trouve_solution_croissante(int indice){
+    	Tache *t = tri_croissant(indice);
+	raz_debut_jobs(indice);
     	int i;
 
     	for (i=0; i < nb_taches; i++)
-		put_tache(t[i]);
+		put_tache(t[i],indice);
 }
 
-void trouve_solution_decroissante(){
-    	Tache *t = tri_decroissant();
+void trouve_solution_decroissante(int indice){
+    	Tache *t = tri_decroissant(indice);
     	int i;
-	raz_debut_jobs();
+	raz_debut_jobs(indice);
     	for (i=0; i < nb_taches; i++)
-		put_tache(t[i]);
+		put_tache(t[i],indice);
     	
 }
 
-void put_tache(Tache t){
+void put_tache(Tache t, int indice){
 	int i;
 	int j=0;
 	int bornes [nb_jobs+1][2];
@@ -178,9 +178,9 @@ void put_tache(Tache t){
 	//Récupère les bornes pour le même job
 	for (i=0;i<3;i++)
 		if (i!=t.machine-1){
-			if (jobs[0][t.job-1]->taches[i].debut!=-1){
-				bornes[j][0]=jobs[0][t.job-1]->taches[i].debut;
-				bornes[j][1]=jobs[0][t.job-1]->taches[i].debut+jobs[0][t.job-1]->taches[i].duree;
+			if (jobs[indice][t.job-1]->taches[i].debut!=-1){
+				bornes[j][0]=jobs[indice][t.job-1]->taches[i].debut;
+				bornes[j][1]=jobs[indice][t.job-1]->taches[i].debut+jobs[indice][t.job-1]->taches[i].duree;
 			}
 			else{
 				bornes[j][0]=-1;
@@ -191,9 +191,9 @@ void put_tache(Tache t){
 	//Récupère les bornes pour la même machines
 	for (i=0;i<nb_jobs;i++)	
 		if (i!=t.job-1){
-			if (jobs[0][i]->taches[t.machine-1].debut!=-1){
-				bornes[j][0]=jobs[0][i]->taches[t.machine-1].debut;
-				bornes[j][1]=jobs[0][i]->taches[t.machine-1].debut+jobs[0][i]->taches[t.machine-1].duree;
+			if (jobs[indice][i]->taches[t.machine-1].debut!=-1){
+				bornes[j][0]=jobs[indice][i]->taches[t.machine-1].debut;
+				bornes[j][1]=jobs[indice][i]->taches[t.machine-1].debut+jobs[indice][i]->taches[t.machine-1].duree;
 			}
 			else{
 				bornes[j][0]=-1;
@@ -226,15 +226,21 @@ void put_tache(Tache t){
 			}
 	}
 	
-	jobs[0][t.job-1]->taches[t.machine-1].debut=start;
+	jobs[indice][t.job-1]->taches[t.machine-1].debut=start;
 
 }
 
-int date_fin(){
+void heuristique_bizarre(int indice){
+	/*Tache *t = tri_decroissant();
+    	int i;
+	raz_debut_jobs();*/
+}
+
+int date_fin(int indice){
 	int i,j,maxc=0;
 	for (i=0;i<nb_jobs;i++)
 		for (j=0;j<3;j++)
-			maxc = max(maxc,jobs[0][i]->taches[j].debut+jobs[0][i]->taches[j].duree);
+			maxc = max(maxc,jobs[indice][i]->taches[j].debut+jobs[indice][i]->taches[j].duree);
 
 	return maxc;
 }

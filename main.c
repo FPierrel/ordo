@@ -21,9 +21,9 @@ int main(){
     //trouve_solution_croissante();
     
 
-trouve_solution_croissante();
-affichage_machine_ASCII();
-affiche_machine();
+trouve_solution_croissante(0);
+affichage_machine_ASCII(0);
+affiche_machine(0);
 
     return 0;
 
