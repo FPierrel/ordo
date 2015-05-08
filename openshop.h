@@ -39,6 +39,7 @@ int date_fin(int indice);
 int max(int a, int b);
 int min(int a, int b);
 Job** croisement(Tache *taches,Job** j1, Job** j2);
+Job** mutation(Tache* taches, Job** jobs);
 //void croisement (int indice);
 
 Job ***jobs;

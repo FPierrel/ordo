@@ -31,9 +31,9 @@ aleatoire(0);
 affichage_machine_ASCII(0);
 printf("\n");
 
-printf("Croisement\n");
-croisement(taches,jobs[0],jobs[1]);
 
+//croisement(taches,jobs[0],jobs[1]);
+mutation(taches, jobs[0]);
     return 0;
 
 }
