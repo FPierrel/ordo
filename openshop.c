@@ -1,5 +1,6 @@
 #include "openshop.h"
 
+//Crée une tache
 Tache nouvelle_tache(int machine, int job, int duree){
     Tache tache;
     tache.machine = machine;
@@ -10,29 +11,32 @@ Tache nouvelle_tache(int machine, int job, int duree){
     return tache;
 }
 
+//Crée un job
 Job* nouveau_job(){
 	Job *j = malloc(sizeof(Job));
 	j->taches = malloc(3*sizeof(Tache));
 	return j;	
 }
 
+//Crée un tableau de job (une solution)
 Job** nouveaux_jobs(Tache *taches){
     	int i,k;
 
     	Job **j = malloc(nb_jobs*sizeof(Job));
-
+	//Initialise tout à -1
 	for (i=0;i<nb_jobs;i++){
 		j[i]=nouveau_job();
 		for(k=0;k<3;k++)			
 			j[i]->taches[k]=nouvelle_tache(-1,-1,-1);
 	}
-
+	//Met uniquement les taches existantes
 	for (i = 0 ; i < nb_taches ; i++)
 		j[taches[i].job-1]->taches[taches[i].machine-1] = taches[i];
 
 	return j;
 }
 
+//Crée un tableau de tableau de job (un tableau de solutions donc une population de solutions)
 Job*** nouvelle_pop(Tache *taches){
 	int i;
 	
@@ -43,6 +47,7 @@ Job*** nouvelle_pop(Tache *taches){
 	return j;
 }
 
+//Affiche la solution indice, en fonction des jobs, de la population actuelle (jobs)
 void affiche(int indice){
     	int i,j;
     	for (i=0;i<nb_jobs;i++) {
@@ -53,6 +58,7 @@ void affiche(int indice){
     	}
 }
 
+//Affiche la solution indice, en fonction des machines, de la population actuelle (jobs)
 void affiche_machine(int indice){
 	int i,j;
 	for (i=0;i<3;i++){
@@ -63,6 +69,7 @@ void affiche_machine(int indice){
 	}
 }
 
+//Affiche la solution indice, en fonction des machines, de la population actuelle (jobs) sous format ascii
 void affichage_machine_ASCII(int indice){
 	int i,j,current,k;
 	for (i=0;i<3;i++){
@@ -83,47 +90,7 @@ void affichage_machine_ASCII(int indice){
 	}
 }
 
-void affiche_next(int indice){
-    	int i,j;
-    	for (i=0;i<nb_jobs;i++) {
-        	printf("Job n°%d\n",i+1);
-        	for (j=0;j<3;j++)
-			if (next_gen[indice][i]->taches[j].job!=-1)
-		        	printf("Machine: %d, debut: %d, duree: %d\n",next_gen[indice][i]->taches[j].machine,next_gen[indice][i]->taches[j].debut,next_gen[indice][i]->taches[j].duree);
-    	}
-}
-
-void affiche_machine_next(int indice){
-	int i,j;
-	for (i=0;i<3;i++){
-		printf("Machine n°%d\n",i+1);
-		for (j=0;j<nb_jobs;j++)
-			if (next_gen[indice][j]->taches[i].job!=-1)
-				printf("Job: %d, debut: %d, duree: %d\n",next_gen[indice][j]->taches[i].job,next_gen[indice][j]->taches[i].debut,next_gen[indice][j]->taches[i].duree);
-	}
-}
-
-void affichage_machine_ASCII_next(int indice){
-	int i,j,current,k;
-	for (i=0;i<3;i++){
-		printf("Machine n°%d\t",i+1);
-		for (j=0;j<date_fin(indice);j++){
-			current=0;
-			for (k=0;k<nb_jobs;k++)
-				if (next_gen[indice][k]->taches[i].debut!=-1 && next_gen[indice][k]->taches[i].debut<=j && next_gen[indice][k]->taches[i].debut+next_gen[indice][k]->taches[i].duree>j){
-					current=next_gen[indice][k]->taches[i].job;
-					break;
-				}
-			if (current==0)
-				printf("-");
-			else
-				printf("%d",current);
-		}
-		printf("\n");		
-	}
-}
-
-void affichage_solution_ASCII(Job** jobs){
+/*void affichage_solution_ASCII(Job** jobs){
 	int i,j,current,k;
 	for (i=0;i<3;i++){
 		printf("Machine n°%d\t",i+1);
@@ -141,8 +108,10 @@ void affichage_solution_ASCII(Job** jobs){
 		}
 		printf("\n");		
 	}
-}
+}*/
 
+
+//Tri les taches de la solution indice et renvoie un tableau de taches triées
 Tache* tri_croissant(int indice){
 
     int i = nb_taches,j,k,pos;
@@ -173,6 +142,7 @@ Tache* tri_croissant(int indice){
     return taches;
 }
 
+//Tri les taches de la solution indice et renvoie un tableau de taches triées
 Tache* tri_decroissant(int indice){
     int i = nb_taches,j,k,pos;
     Tache *taches = malloc(nb_taches*sizeof(Tache));
@@ -202,6 +172,7 @@ Tache* tri_decroissant(int indice){
     return taches;
 }
 
+//Remet les debuts de toutes les taches de la solution indice, de la population actuelle (jobs), à -1
 void raz_debut_jobs(int indice){
 	int i,j;
     	for (i=0;i<nb_jobs;i++)
@@ -209,6 +180,7 @@ void raz_debut_jobs(int indice){
 			jobs[indice][i]->taches[j].debut=-1;
 }
 
+//Remet les debuts de toutes les taches de la solution indice, de la nouvelle génération (next_gen), à -1
 void raz_debut_next(int indice){
 	int i,j;
     	for (i=0;i<nb_jobs;i++)
@@ -216,6 +188,7 @@ void raz_debut_next(int indice){
 			next_gen[indice][i]->taches[j].debut=-1;
 }
 
+//Met les taches dans l'ordre croissant de leur durée dans la solution indice
 void trouve_solution_croissante(int indice){
     	Tache *t = tri_croissant(indice);
 	raz_debut_jobs(indice);
@@ -225,6 +198,7 @@ void trouve_solution_croissante(int indice){
 		put_tache(t[i],indice);
 }
 
+//Met les taches dans l'ordre décroissant de leur durée dans la solution indice
 void trouve_solution_decroissante(int indice){
     	Tache *t = tri_decroissant(indice);
     	int i;
@@ -234,6 +208,7 @@ void trouve_solution_decroissante(int indice){
     	
 }
 
+//Met une tache t le plus tôt possible dans la solution indice de la population actuelle
 void put_tache(Tache t, int indice){
 	int i;
 	int j=0;
@@ -292,11 +267,12 @@ void put_tache(Tache t, int indice){
 				}
 			}
 	}
-	
+	//Met la tache
 	jobs[indice][t.job-1]->taches[t.machine-1].debut=start;
 
 }
 
+//Met une tache t le plus tôt possible dans la solution indice de la nouvelle génération
 void put_tache_next(Tache t, int indice){
 	int i;
 	int j=0;
@@ -360,6 +336,11 @@ void put_tache_next(Tache t, int indice){
 
 }
 
+/*Met les taches dans l'ordre suivant :
+*	Choisit le job qui lui reste le plus de durée cumulé à placer
+*	Choisit la tache qui a la plus grosse durée de ce job et la positionne
+*	Recommence jusqu'à épuisement des taches
+*/	
 void heuristique_bizarre(int indice){
 	Tache *t = tri_bizarre(indice);
     	int i;
@@ -370,7 +351,7 @@ void heuristique_bizarre(int indice){
 		
 }
 
-
+//Met les taches dans un ordre aléatoire
 void aleatoire(int indice){
 	Tache *t = tri_croissant(indice);
 	int i;
@@ -393,9 +374,10 @@ void aleatoire(int indice){
 
 }
 
+//Renvoie la place-ieme tache la plus grosse du job job de la solution indice
 int tache_max(int job, int place, int indice){
 	int classement[3];
-	
+	//Trie des taches
 	if (jobs[indice][job]->taches[0].duree>jobs[indice][job]->taches[1].duree)
 		if (jobs[indice][job]->taches[0].duree>jobs[indice][job]->taches[2].duree){
 			classement[0]=0;
@@ -433,6 +415,7 @@ int tache_max(int job, int place, int indice){
 
 }
 
+//Tri les taches dans l'ordre pour la troisieme heuristique
 Tache * tri_bizarre(int indice){
 	Tache *taches = malloc(nb_taches*sizeof(Tache));
 	int duree_jobs[nb_jobs];
@@ -440,24 +423,31 @@ Tache * tri_bizarre(int indice){
 	int current_job,current_machine;	
 	int cpt_jobs[nb_jobs];
 
+	//Calcul la durée total de chaque job
 	for (i=0;i<nb_jobs;i++){
 		duree_jobs[i]=0;
 		for (j=0;j<3;j++)
 			if (jobs[indice][i]->taches[j].duree!=-1)
 				duree_jobs[i]+=jobs[indice][i]->taches[j].duree;
 	}
-
+	//Init du compteur
 	for (i=0;i<nb_jobs;i++)
 		cpt_jobs[i]=0;
 
+	//Trie les taches dans l'ordre voulu
 	for (i=0;i<nb_taches;i++){
 		current_job=0;
+		//Cherche le job qui a la plus grosse durée restante
 		for (j=1;j<nb_jobs;j++)
 			if (duree_jobs[current_job]<duree_jobs[j])
-				current_job=j;	
+				current_job=j;
+		//Récupère la tache la plus grosse restante sur ce job	
 		current_machine=tache_max(current_job,cpt_jobs[current_job],indice);
+		//Incrémente le compteur de ce job
 		cpt_jobs[current_job]++;
+		//Enleve la durée à la durée totale restante de ce job
 		duree_jobs[current_job]-=jobs[indice][current_job]->taches[current_machine].duree;
+		//Met la tache de le tableau
 		taches[i]=jobs[indice][current_job]->taches[current_machine];
 	}
 
@@ -466,6 +456,7 @@ Tache * tri_bizarre(int indice){
 
 }
 
+//Retourne Cmax de la solution indice
 int date_fin(int indice){
 	int i,j,maxc=0;
 	for (i=0;i<nb_jobs;i++)
@@ -475,10 +466,12 @@ int date_fin(int indice){
 	return maxc;
 }
 
+//Fonction mathématique max
 int max(int a, int b){
     return a > b ? a : b;
 }
 
+//Fonction mathématique min
 int min(int a, int b){
     return a > b ? b : a;
 }
@@ -529,27 +522,41 @@ int min(int a, int b){
 	return res;
 }*/
 
-
+/*Fonction de croisement pour AG
+*	p1,p2 les indices des deux parents dans la population actuelle
+*	enf l'indice de l'enfant dans la nouvelle génération
+*
+*
+*
+*/
 void croisement (int p1, int p2, int enf){
-	int parent = rand()%2; 	//parent sur lequel on coupe
+	//Choisit un parent aléatoirement
+	int parent = rand()%2;
 	if (parent==1){
 		parent=p1;
 		p1=p2;
 		p2=parent;
 	}
-	int m = rand()%3;	//machine sur laquelle on coupe
+	//Choisit une machine aléatoirement
+	int m = rand()%3;
+	//Choisit le point de coupe aléatoirement sur le parent séléctionné et sur la machine séléctionné
 	int ptCoupe = rand()%nb_jobs;
 	ptCoupe=jobs[p1][ptCoupe]->taches[m].debut+jobs[p1][ptCoupe]->taches[m].duree;
+
 	Tache *t = malloc(nb_jobs*sizeof(Tache));
 	int i,j,k=0;	
 
+	//Recopie les deux machines non séléctionné du parent séléctionné
 	for (i=0;i<nb_jobs;i++)
 		for (j=0;j<3;j++)
+			//Si machine non séléctionnée on recopie
 			if (j!=m)
 				next_gen[enf][i]->taches[j]=jobs[p1][i]->taches[j];
 			else
+				//Sinon si avant point de coupe on recopie
 				if (jobs[p1][i]->taches[j].debut+jobs[p1][i]->taches[j].duree<=ptCoupe)
 					next_gen[enf][i]->taches[j]=jobs[p1][i]->taches[j];
+				//Sinon on met la tache dans un tableau
 				else{
 					t[k]=jobs[p2][i]->taches[j];
 					k++;
@@ -557,7 +564,7 @@ void croisement (int p1, int p2, int enf){
 
 	
 
-
+	//Trie des taches pas encore mises dans l'ordre du parent non séléctionné
 	int echange = 1;
 	Tache tmp;
 	i = k;
@@ -574,24 +581,32 @@ void croisement (int p1, int p2, int enf){
 		i--;
     	}
 	
-
+	//On met les taches
 	for (i=0;i<k;i++)
 		put_tache_next(t[i],enf);
 			
 
 }
 
+
+/*Fonction de mutation de AG
+*	p l'indice du parent dans la population actuelle
+*	enf l'indice de l'enfant dans la nouvelle génération
+*/
 void mutation(int p, int enf){
-	int m = rand()%3;	//machine sur laquelle on coupe
+	//Séléctionne une machine aléatoirement
+	int m = rand()%3;
+
 	int i,j;
 
+	//Recopie les deux machines non séléctionnées
 	for (i=0;i<nb_jobs;i++)
 		for (j=0;j<3;j++)
 			if (j!=m)
 				next_gen[enf][i]->taches[j]=jobs[p][i]->taches[j];
 
+	//Remplit aléatoirement la dernière machine
 	j=rand()%nb_jobs;
-
 	for (i=0;i<nb_jobs;i++){
 		if (jobs[p][j]->taches[m].duree!=-1)
 			put_tache_next(jobs[p][j]->taches[m],enf);
@@ -602,6 +617,7 @@ void mutation(int p, int enf){
 
 }
 
+//Calcul la somme de Ci de la solution indice de la population actuelle
 int calcul_obj(int indice){
 	int i,j,maxc,somme=0;
 
@@ -617,16 +633,21 @@ int calcul_obj(int indice){
 
 }
 
+//Tri la population par ordre croissant de l'objectif (somme des Ci)
 void tri_pop(){
 	int i,j,tmp;
 	int indice[nb_pop];
 	int somme[nb_pop];
-	
+	//Initialisation
 	for (i=0;i<nb_pop;i++){
+		//Calcul des objectifs
 		somme[i]=calcul_obj(i);
+		//Labelisation
 		indice[i]=i;
+		//Copie temporaire de la population actuelle
 		temp[i]=jobs[i];
 	}
+	//Tri
 	int echange=1;
 	i=nb_pop;
 	while ((i>0) && (echange)){
@@ -644,33 +665,43 @@ void tri_pop(){
 		}
 		i--;
     	}
-
+	//Recopie dans la population actuelle
 	for (i=0;i<nb_pop;i++)
 		jobs[i]=temp[indice[i]];
 
 }
 
+//Fonction de l'algo génétique
 void algo_genetique(){
 	int i,alea,p1,p2,j=0;
 
-	//Création de la population de base
+	//Création de la population de base aléatoirement
 	for (i=0;i<nb_pop;i++){
 		raz_debut_jobs(i);		
 		raz_debut_next(i);
 		aleatoire(i);
 	}
 	
+	//Nombre de génération
 	while(j!=nb_time){
-		//Tri de la population
+		//Tri de la population par ordre croissant de l'objectif
 		tri_pop();
 		
-		//affichage_machine_ASCII(0);
+		//Pour chaque nouvel enfant
 		for (i=0;i<nb_pop;i++)
+			//On garde les X premiers de la population
 			if (i<nb_pop_keep)
 				next_gen[i]=jobs[i];
 			else{	
+				//80% de chance de faire un croisement
+				//15% de faire une mutation
+				//5% de faire un clonage
 				alea=rand()%100;
+				//Si croisement
 				if (alea<80){
+					//On chosit deux parents avec 50% de chance qu'ils soient dans les 20 premiers pourcent
+					//30% qu'ils soient entre 20-70%
+					//20% qu'ils soient dans les 30 derniers pourcent 
 					p1=rand()%100;
 					if (p1<50)
 						p1=rand()%(int)(0.2*nb_pop);
@@ -685,13 +716,19 @@ void algo_genetique(){
 						p2=rand()%(int)(0.3*nb_pop)+0.7*nb_pop;
 					else
 						p2=rand()%(int)(0.5*nb_pop)+0.2*nb_pop;
+					//On effectue le croisement
 					croisement(p1,p2,i);
 					
 				}
+				//Si clonage
 				else if (alea>95){
 					next_gen[i]=jobs[i];
 				}
+				//Si mutation
 				else{
+					//On chosit un parent avec 50% de chance qu'il soit dans les 20 premiers pourcent
+					//30% qu'il soit entre 20-70%
+					//20% qu'il soit dans les 30 derniers pourcent 
 					p1=rand()%100;
 					if (p1<50)
 						p1=rand()%(int)(0.5*nb_pop);
@@ -699,15 +736,18 @@ void algo_genetique(){
 						p1=rand()%(int)(0.3*nb_pop)+0.7*nb_pop;
 					else
 						p1=rand()%(int)(0.2*nb_pop)+0.2*nb_pop;
+					//On effectue la mutation
 					mutation(p1,i);
 				}
 
 			}
+		//On recopie la nouvelle génération dans la génération actuelle
 		for (i=0;i<nb_pop;i++)
 			jobs[i]=next_gen[i];
 		
 		j++;
 	}
+	//On trie une dernière fois la population actuelle
 	tri_pop();
 	
 			
