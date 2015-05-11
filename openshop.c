@@ -90,26 +90,6 @@ void affichage_machine_ASCII(int indice){
 	}
 }
 
-/*void affichage_solution_ASCII(Job** jobs){
-	int i,j,current,k;
-	for (i=0;i<3;i++){
-		printf("Machine n°%d\t",i+1);
-		for (j=0;j<50;j++){
-			current=0;
-			for (k=0;k<nb_jobs;k++)
-				if (jobs[k]->taches[i].debut!=-1 && jobs[k]->taches[i].debut<=j && jobs[k]->taches[i].debut+jobs[k]->taches[i].duree>j){
-					current=jobs[k]->taches[i].job;
-					break;
-				}
-			if (current==0)
-				printf("-");
-			else
-				printf("%d",current);
-		}
-		printf("\n");		
-	}
-}*/
-
 
 //Tri les taches de la solution indice et renvoie un tableau de taches triées
 Tache* tri_croissant(int indice){
@@ -336,13 +316,14 @@ void put_tache_next(Tache t, int indice){
 
 }
 
-/*Met les taches dans l'ordre suivant :
+/*Most Work Remaining
+* Met les taches dans l'ordre suivant :
 *	Choisit le job qui lui reste le plus de durée cumulé à placer
 *	Choisit la tache qui a la plus grosse durée de ce job et la positionne
 *	Recommence jusqu'à épuisement des taches
 */	
-void heuristique_bizarre(int indice){
-	Tache *t = tri_bizarre(indice);
+void most_work_remaining(int indice){
+	Tache *t = tri_mwr(indice);
     	int i;
 	raz_debut_jobs(indice);
 	
@@ -415,8 +396,8 @@ int tache_max(int job, int place, int indice){
 
 }
 
-//Tri les taches dans l'ordre pour la troisieme heuristique
-Tache * tri_bizarre(int indice){
+//Tri les taches dans l'ordre pour le Most Work Remaining
+Tache * tri_mwr(int indice){
 	Tache *taches = malloc(nb_taches*sizeof(Tache));
 	int duree_jobs[nb_jobs];
 	int i,j;
@@ -476,51 +457,6 @@ int min(int a, int b){
     return a > b ? b : a;
 }
 
-/*Job** croisement(Tache *taches, Job** j1, Job** j2){ //Ne test pas la validité de la solution !!
-	int fils = rand()%2; //parent sur lequel on coupe
-	int m = rand()%3; //machine sur lequel on fait le croisement
-	int ptCoupe = 0;
-	int i,j;
-	Job **res = nouveaux_jobs(taches);
-	Job **s1;
-	Job **s2;
-	
-	if (fils == 0){
-		s1 = j1;
-		s2 = j2;
-	}
-	else{
-		s1 = j2;
-		s2 = j1;
-	}
-	
-	for (i = 0 ; i < nb_jobs ; i++)
-		if (s1[i]->taches[m].debut + s1[i]->taches[m].duree > ptCoupe)
-			ptCoupe = s1[i]->taches[m].debut + s1[i]->taches[m].duree;
-		
-	//On recopie et complete
-	for(i = 0 ; i < nb_jobs ; i++){
-		for (j = 0 ; j < 3 ; j++){
-			if (j != m){				
-				res[i]->taches[j].debut = s1[i]->taches[j].debut;
-			}
-			else
-			{				
-				if (s1[i]->taches[m].debut + s1[i]->taches[m].duree <= ptCoupe)
-					res[i]->taches[j].debut = s1[i]->taches[j].debut;
-				else
-					res[i]->taches[j].debut = s2[i]->taches[j].debut;	
-			}
-		}
-	}
-	
-	printf("Test croisement\n");
-	printf("fils %d, machine %d, ptCoupe %d\n",fils,m,ptCoupe);
-	affichage_solution_ASCII(j1);
-	affichage_solution_ASCII(j2);
-	affichage_solution_ASCII(res);
-	return res;
-}*/
 
 /*Fonction de croisement pour AG
 *	p1,p2 les indices des deux parents dans la population actuelle
@@ -753,98 +689,3 @@ void algo_genetique(){
 			
 
 }
-
-/*Job** mutation(Tache* taches, Job** jobs){
-	printf("mutation\n");
-	affichage_solution_ASCII(jobs);
-	
-	Job **res = nouveaux_jobs(taches);
-	int m, sens, num_j;
-	int date_prem = INT_MAX, prem, date_der = INT_MIN, der;
-	int i, j;
-	int swap, delta;
-	int bon_param = 0;
-	
-	while (!bon_param){ //test si la tache n'est pas toute seul sur la machine
-		m = rand() %  3 ;  //choisir sur quelle machine faire la mutation (m1, m2 ou m3)
-		sens = rand() % 2 ; // 0 on echange avec celle d'avant, 1 après (sauf si c'est la premiere ou la derniere sinn on mutera quasi jamais)
-		num_j = rand() % nb_jobs; //num du job a echanger
-		bon_param = 1;
-		for (i = 0 ; i < nb_jobs ; i++)
-			if (jobs[i]->taches[m].debut >= 0 && i != num_j)
-				bon_param = 1; 
-		if (jobs[num_j]->taches[m].debut < 0)
-			bon_param = 0;
-	}
-	
-	for (i = 0 ; i < nb_jobs ; i++){
-		if (jobs[i]->taches[m].debut < date_prem && jobs[i]->taches[m].debut >= 0){
-			date_prem = jobs[i]->taches[m].debut;
-			prem = i;
-		}
-		if (jobs[i]->taches[m].debut > date_der && jobs[i]->taches[m].debut >= 0){
-			date_der = jobs[i]->taches[m].debut;
-			der = i;
-		}
-	}	
-	if (num_j == prem)
-		sens = 1;
-	else if (num_j == der)
-		sens = 0;
-	
-	//recopie des deux autres machines
-	for (i = 0 ; i < nb_jobs ; i++)
-		for (j = 0 ; j < 3 ; j++)
-			if (j!=m)
-				res[i]->taches[j].debut = jobs[i]->taches[j].debut;
-
-	if (sens==0){
-		//recherche du numero de tache juste avant
-		date_prem = INT_MIN; 
-		for (j = 0 ; j < nb_jobs ; j++)
-			if (jobs[j]->taches[m].debut > date_prem && jobs[j]->taches[m].debut < jobs[num_j]->taches[m].debut && jobs[j]->taches[m].debut >= 0)
-			{
-				date_prem = jobs[j]->taches[m].debut;
-				swap = j;
-			}
-
-		//on echange les taches et decales les taches d'ap si necessaire
-		delta = jobs[num_j]->taches[m].duree - jobs[swap]->taches[m].duree;
-		if (delta > 0) //on decales les taches d'ap
-			for (j = 0 ; j < nb_jobs ; j++)
-				if (jobs[j]->taches[m].debut > jobs[num_j]->taches[m].debut)
-					jobs[j]->taches[m].debut += delta;
-					
-
-		//echange
-		i = jobs[num_j]->taches[m].debut;
-		jobs[num_j]->taches[m].debut = jobs[swap]->taches[m].debut;
-		jobs[swap]->taches[m].debut = i;
-	}
-	else{
-		date_der = INT_MAX;
-		for (j = 0 ; j < nb_jobs ; j++)
-			if (jobs[j]->taches[m].debut < date_der && jobs[j]->taches[m].debut > jobs[num_j]->taches[m].debut && jobs[j]->taches[m].debut >= 0)
-			{
-				date_der = jobs[j]->taches[m].debut;
-				swap = j;
-			}
-		
-		delta = jobs[num_j]->taches[m].duree - jobs[swap]->taches[m].duree; 
-		
-		if (delta > 0)
-			for (j = 0 ; j < nb_jobs ; j++)
-				if (jobs[j]->taches[m].debut > jobs[num_j]->taches[m].debut)
-					jobs[j]->taches[m].debut += delta;
-		
-		i = jobs[num_j]->taches[m].debut;
-		jobs[num_j]->taches[m].debut = jobs[swap]->taches[m].debut;
-		jobs[swap]->taches[m].debut = i;
-	}
-	for (i = 0 ; i < nb_jobs ; i++)
-		res[i]->taches[m].debut = jobs[i]->taches[m].debut;
-	
-	printf("ap mut\n");
-	affichage_solution_ASCII(res);
-	return res;
-}*/

@@ -102,7 +102,7 @@ int main(){
 			printf("--Choisir l'affichage--\n");
 			printf("1. Ordonnancement par tri croissant des durées des taches\n");
 			printf("2. Ordonnancement par tri décroissant des durées des taches\n");
-			printf("3. Ordonnancement par tri décroissant des taches qui appartiennent au job qui a la plus grosse durée restante\n");
+			printf("3. Ordonnancement par Most Work Remaining\n");
 			printf("4. Ordonnancement aléatoire\n");
 			printf("5. Algo Génétique\n");
 			printf("6. Tout\n");
@@ -128,8 +128,8 @@ int main(){
 				affichage_machine_ASCII(0);
 			}
 			else if (i==3){
-				heuristique_bizarre(0);
-				printf("3eme heuristique\n\n");
+				most_work_remaining(0);
+				printf("Most Work Remaining\n\n");
 				printf("Somme des Ci: %d\n\n",calcul_obj(0));
 				affichage_machine_ASCII(0);
 			}
@@ -152,8 +152,8 @@ int main(){
 				printf("\n\nTri décroissant\n\n");
 				printf("Somme des Ci : %d\n\n",calcul_obj(0));
 				affichage_machine_ASCII(0);
-				heuristique_bizarre(0);
-				printf("\n\n3eme heuristique\n\n");
+				most_work_remaining(0);
+				printf("\n\nMost Work Remaining\n\n");
 				printf("Somme des Ci: %d\n\n",calcul_obj(0));
 				affichage_machine_ASCII(0);
 				aleatoire(0);
