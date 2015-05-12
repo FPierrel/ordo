@@ -1,0 +1,8 @@
+
+Dans un terminal dans le repertoire des sources et .lp :
+
+ - Pour compiler le programme : taper make
+
+ - Pour lancer le programme : taper main
+
+ - Pour résoudre les .lp : taper lpsolve (ou autre solveur) exampleX.lp (avec x = 1,2,3)
