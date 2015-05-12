@@ -1,4 +1,4 @@
-min: C0+C1+C2+C3+C4+C5+C6+C7+C8; /* Somme des Ci */
+min: j1+j2+j3+j4; /* Somme des Ci des jobs */
 
 /* Borne max = Somme des durées opératoires */
 // M = 37;
@@ -83,16 +83,19 @@ C6 >= p6;
 C7 >= p7;
 C8 >= p8;
 
-C0 <= Cmax;
-C1 <= Cmax;
-C2 <= Cmax;
-C3 <= Cmax;
-C4 <= Cmax;
-C5 <= Cmax;
-C6 <= Cmax;
-C7 <= Cmax;
-C8 <= Cmax;
+C0 <= j1;
+C1 <= j1;
+C2 <= j2;
+C3 <= j2;
+C4 <= j2;
+C5 <= j3;
+C6 <= j4;
+C7 <= j4;
+C8 <= j4;
 
-Cmax >=0 ;
+j1 >= 0;
+j2 >= 0;
+j3 >= 0;
+j4 >= 0;
 
 bin x01, x10, x23, x32, x34, x43, x24, x42, x67, x76, x68, x86, x78, x87, x04, x40, x05, x50, x06, x60, x45, x54, x46, x64, x56, x65, x27, x72, x31, x13, x38, x83, x18, x81;

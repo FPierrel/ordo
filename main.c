@@ -7,11 +7,11 @@ int main(){
 	//Nombre de taches total
 	nb_taches = 9;
 	//Nombre de solutions dans la population pour AG
-	nb_pop=100;
+	nb_pop = 100;
 	//Nombre de solution que l'on garde à chaque génération
-	nb_pop_keep=0.05*nb_pop;
+	nb_pop_keep = 0.05*nb_pop;
 	//Nombre de génération
-	nb_time=100;
+	nb_time = 100;
 
 	//Instance 1 
 	Tache taches[9];
@@ -50,7 +50,7 @@ int main(){
 	t3[3] = nouvelle_tache(1,2,3);
 	t3[4] = nouvelle_tache(2,2,9);
 	t3[5] = nouvelle_tache(3,2,2);
-	t3[6] = nouvelle_tache(1,3,10);	
+	t3[6] = nouvelle_tache(1,3,10);
 	
 	//Initialise la population temporaire
 	//temp = nouvelle_pop(taches);
