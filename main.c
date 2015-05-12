@@ -105,7 +105,8 @@ int main(){
 			printf("3. Ordonnancement par Most Work Remaining\n");
 			printf("4. Ordonnancement aléatoire\n");
 			printf("5. Algo Génétique\n");
-			printf("6. Tout\n");
+			printf("6. Tout (Gantt Machine)\n");
+			printf("7. Tout (Gantt Produit)\n");
 			printf("0. Quitter\n");
 			scanf("%d",&i);
 			system("clear");
@@ -114,32 +115,37 @@ int main(){
 				printf("Algo génétique\n\n");
 				printf("Somme des Ci : %d\n\n",calcul_obj(0));
 				affichage_machine_ASCII(0);
+				affiche_ASCII(0);				
 			}
 			else if (i==1){
 				trouve_solution_croissante(0);
 				printf("Tri croissant\n\n");
 				printf("Somme des Ci : %d\n\n",calcul_obj(0));
 				affichage_machine_ASCII(0);
+				affiche_ASCII(0);
 			}
 			else if (i==2){
 				trouve_solution_decroissante(0);
 				printf("Tri décroissant\n\n");
 				printf("Somme des Ci : %d\n\n",calcul_obj(0));
 				affichage_machine_ASCII(0);
+				affiche_ASCII(0);
 			}
 			else if (i==3){
 				most_work_remaining(0);
 				printf("Most Work Remaining\n\n");
 				printf("Somme des Ci: %d\n\n",calcul_obj(0));
 				affichage_machine_ASCII(0);
+				affiche_ASCII(0);
 			}
 			else if (i==4){
 				aleatoire(0);
 				printf("Aléatoire\n\n");
 				printf("Somme des Ci: %d\n\n",calcul_obj(0));
 				affichage_machine_ASCII(0);
+				affiche_ASCII(0);
 			}
-			else if (i>5){
+			else if (i==6){
 				algo_genetique();	
 				printf("Algo génétique\n\n");
 				printf("Somme des Ci : %d\n\n",calcul_obj(0));
@@ -160,6 +166,28 @@ int main(){
 				printf("\n\nAléatoire\n\n");
 				printf("Somme des Ci: %d\n\n",calcul_obj(0));
 				affichage_machine_ASCII(0);
+			}
+			else if (i>6){
+				algo_genetique();	
+				printf("Algo génétique\n\n");
+				printf("Somme des Ci : %d\n\n",calcul_obj(0));
+				affiche_ASCII(0);
+				trouve_solution_croissante(0);
+				printf("\n\nTri croissant\n\n");
+				printf("Somme des Ci : %d\n\n",calcul_obj(0));
+				affiche_ASCII(0);
+				trouve_solution_decroissante(0);
+				printf("\n\nTri décroissant\n\n");
+				printf("Somme des Ci : %d\n\n",calcul_obj(0));
+				affiche_ASCII(0);
+				most_work_remaining(0);
+				printf("\n\nMost Work Remaining\n\n");
+				printf("Somme des Ci: %d\n\n",calcul_obj(0));
+				affiche_ASCII(0);
+				aleatoire(0);
+				printf("\n\nAléatoire\n\n");
+				printf("Somme des Ci: %d\n\n",calcul_obj(0));
+				affiche_ASCII(0);
 			}
 
 		}

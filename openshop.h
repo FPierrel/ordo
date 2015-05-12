@@ -24,6 +24,7 @@ Job*** nouvelle_pop(Tache *taches);
 void affiche(int indice);
 void affiche_machine(int indice);
 void affichage_machine_ASCII(int indice);
+void affiche_ASCII(int indice);
 Tache* tri_croissant();
 Tache* tri_decroissant();
 void raz_debut_jobs(int indice);

@@ -72,6 +72,7 @@ void affiche_machine(int indice){
 //Affiche la solution indice, en fonction des machines, de la population actuelle (jobs) sous format ascii
 void affichage_machine_ASCII(int indice){
 	int i,j,current,k;
+	printf("--Gantt Machine--\n\n");
 	for (i=0;i<3;i++){
 		printf("Machine n°%d\t",i+1);
 		for (j=0;j<date_fin(indice);j++){
@@ -88,6 +89,30 @@ void affichage_machine_ASCII(int indice){
 		}
 		printf("\n");		
 	}
+	printf("\n");
+}
+
+//Affiche la solution indice, en fonction des jobs, de la population actuelle (jobs) sous format ascii
+void affiche_ASCII(int indice){
+    	int i,j,current,k;
+	printf("--Gantt Produit--\n\n");
+    	for (i=0;i<nb_jobs;i++) {
+        	printf("Job n°%d\t\t",i+1);
+		for (k=0;k<date_fin(indice);k++){
+			current=0;
+			for (j=0;j<3;j++)
+				if (jobs[indice][i]->taches[j].debut!=-1 && jobs[indice][i]->taches[j].debut<=k && jobs[indice][i]->taches[j].debut+jobs[indice][i]->taches[j].duree>k){
+					current=jobs[indice][i]->taches[j].machine;
+					break;
+				}
+			if (current==0)
+				printf("-");
+			else
+				printf("%d",current);
+		}
+		printf("\n");
+    	}
+	printf("\n");
 }
 
 
